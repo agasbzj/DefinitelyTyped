@@ -1,4 +1,4 @@
-// Type definitions for non-npm package amap-js-sdk 1.4
+// Type definitions for non-npm package amap-js-sdk 1.4.15
 // Project: http://lbs.amap.com/api/javascript-api/summary/
 // Definitions by: Bian Zhongjie <https://github.com/agasbzj>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
@@ -241,6 +241,32 @@ declare namespace AMap {
         setMap(map: Map): void;
     }
 
+    class LabelsLayer extends Layer {
+        constructor(opts?: {
+            visible?: boolean,
+            zIndex?: number,
+            opacity?: number,
+            collision?: boolean,
+            animation?: boolean
+        });
+
+        getCollision(): boolean;
+        setCollision(collision: boolean): void;
+        getOpacity(): number;
+        setOpacity(opacity: number): void;
+        getzIndex(): number;
+        setzIndex(zIndex: number): void;
+        getAnimation(): boolean;
+        setAnimation(animation: boolean): void;
+        getZooms(): number[];
+        setZooms(zooms: number[]): void;
+        add(marker: LabelMarker|LabelMarker[]): void;
+        remove(marker: LabelMarker|LabelMarker[]): void;
+        clear(): void;
+        show(): void;
+        hide(): void;
+    }
+
     class TileLayer extends Layer {
         constructor(tileOpt?: {
             map: Map,
@@ -287,6 +313,8 @@ declare namespace AMap {
             autoRefresh: boolean;
         }
     }
+
+
 
     class IndoorMap {
         constructor(opts: {
@@ -790,6 +818,164 @@ declare namespace AMap {
         getExtData(): any;
     }
 
+    class ElasticMarker extends Marker {
+        constructor(opt: {
+            styles?: {
+                icon?: {
+                    img: string,
+                    size?: number[],
+                    ancher?: number[],
+                    imageOffset?: number[],
+                    imageSize?: number[],
+                    fitZoom?: number,
+                    scaleFector?: number,
+                    maxScale?: number,
+                    minScale?: number
+                },
+                label?: {
+                    content: string,
+                    position?: 'BL'|'BM'|'BR'|'ML'|'MR'|'TL'|'TM'|'TR',
+                    offset?: number[],
+                    minZoom?: number
+                }
+            }[],
+            zoomStyleMapping?: [[key: number], number],
+            map?: Map,
+            position?: LngLat,
+            topWhenClick?: boolean,
+            bubble?: boolean,
+            draggable?: boolean,
+            cursor?: string,
+            visible?: boolean,
+            zIndex?: number,
+            clickable?: boolean,
+            extData?: any
+        });
+
+        markOnAMAP(obj: {
+            name: string,
+            position: LngLat
+        }): void;
+
+        setClickable(clickable: boolean): void;
+        getClickable(): boolean;
+        getPosition(): LngLat;
+        setPosition(lnglat: LngLat): void;
+        setzIndex(index: number): void;
+        getzIndex(): number;
+        setDraggable(draggable: boolean): void;
+        getDraggable(): boolean;
+        hide(): void;
+        show(): void;
+        setCursor(cursor: string): string;
+        setMap(map: Map): void;
+        getMap(): Map;
+        setTitle(title: string): void;
+        getTitle(): string;
+        setTop(isTop: boolean): void;
+        getTop(): boolean;
+        setExtData(ext: any): void;
+        getExtData(): any;
+    }
+
+    class Text extends Marker {
+        constructor(opt: {
+            text?: string,
+            map?: Map,
+            position?: LngLat,
+            anchor?: 'top-left'|'top-center'|'top-right'|'middle-left'|'center'|'middle-right'|'bottom-left'|'bottom-center'|'bottom-right',
+            offset?: Pixel,
+            topWhenClick?: boolean,
+            bubble?: boolean,
+            draggable?: boolean,
+            raiseOnDrag?: boolean,
+            cursor?: string,
+            visible?: boolean,
+            zIndex?: number,
+            angle?: number,
+            autoRotation?: boolean,
+            animation?: 'AMAP_ANIMATION_NONE'|'AMAP_ANIMATION_DROP'|'AMAP_ANIMATION_BOUNCE',
+            shadow?: Icon,
+            title?: string,
+            clickable?: boolean,
+            extData?: any
+        });
+
+        getText(): string;
+        setText(text: string): void;
+        setStyle(style: object): void;
+        markOnAMAP(obj: {
+            name: string,
+            position: LngLat
+        }): void;
+        getAnchor(): string;
+        setAnchor(anchor: string): void;
+        getOffset(): Pixel;
+        setOffset(offset: Pixel): void;
+        setAnimation(animate: 'AMAP_ANIMATION_NONE'|'AMAP_ANIMATION_DROP'|'AMAP_ANIMATION_BOUNCE'): void;
+        getAnimation(): 'AMAP_ANIMATION_NONE'|'AMAP_ANIMATION_DROP'|'AMAP_ANIMATION_BOUNCE';
+        setClickable(clickable: boolean): void;
+        getClickable(): boolean;
+        getPosition(): LngLat;
+        setPosition(lnglat: LngLat): void;
+        setAngle(angle: number): void;
+        getAngle(): number;
+        setzIndex(index: number): void;
+        getzIndex(): number;
+        setDraggable(draggable: boolean): void;
+        getDraggable(): boolean;
+        hide(): void;
+        show(): void;
+        setCursor(cursor: string): void;
+        moveAlong(path: LngLat[], speed?: number, f?: (k: number) => number, circlable?: boolean): void;
+        moveTo(lnglat: LngLat, speed?: number, f?: (k: number) => number): void;
+        stopMove(): void;
+        pauseMove(): void;
+        resumeMove(): void;
+        setMap(map: Map): void;
+        getMap(): Map;
+        setTitle(title: string): void;
+        getTitle(): string;
+        setTop(isTop: boolean): void;
+        getTop(): boolean;
+        setShadow(icon: Icon): void;
+        getShadow(): Icon;
+        setExtData(ext: any): void;
+        getExtData(): any;
+    }
+
+    class CircleMarker extends Marker {
+
+    }
+
+    class Ellipse extends Marker {
+
+    }
+
+    class Rectangle extends Marker {
+
+    }
+
+    class OverlayGroup extends Marker {
+
+    }
+
+    class GeoJSON extends Marker {
+
+    }
+
+    class GroundImage extends Marker {
+
+    }
+
+    class ContextMenu extends Marker {
+
+    }
+
+    class LabelMarker extends Marker {
+
+    }
+
     interface MapControl {
         show(): void;
         hide(): void;
@@ -1252,10 +1438,24 @@ declare namespace AMap {
             city?: string,
             datatype?: string,
             citylimit?: boolean,
-            input?: string
+            /**
+             * 可选参数，用来指定一个input输入框，设定之后，在input输入文字将自动生成下拉选择列表。支持传入输入框DOM对象的id值，或直接传入输入框的DOM对象。
+             */
+            input?: string|HTMLDivElement,
+            /**
+             * 可选参数，指定一个现有的div的id或者元素，作为展示提示结果的容器，当指定了input的时候有效，缺省的时候将自动创建一个显示结果面板
+             */
+            output?: string|HTMLDivElement,
+            /**
+             * 默认为true，表示是否在input位于页面较下方的时候自动将输入面板显示在input上方以避免被遮挡
+             */
+            outPutDirAuto?: boolean
         });
 
         search(keyword: string, callback: (status: string, result: string | AutocompleteResult) => void): void;
+        setType(type: string): void;
+        setCity(city: string): void;
+        setCityLimit(limit: boolean): void;
     }
 
     interface SelectChangeEvent {
