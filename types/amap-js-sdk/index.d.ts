@@ -527,6 +527,7 @@ declare namespace AMap {
         label?: { content: string, offset: Pixel };
     }
 
+
     /**
      * 点标记。
      */
@@ -538,11 +539,14 @@ declare namespace AMap {
             position: LngLat
         }): void;
 
+        getAnchor(): 'top-left'|'top-center'|'top-right'|'middle-left'|'center'|'middle-right'|'bottom-left'|'bottom-center'|'bottom-right';
+        setAnchor(anchor: 'top-left'|'top-center'|'top-right'|'middle-left'|'center'|'middle-right'|'bottom-left'|'bottom-center'|'bottom-right'): void;
+
         getOffset(): Pixel;
         setOffset(offset: Pixel): void;
 
-        setAnimation(animate: string): void;
-        getAnimation(): string;
+        setAnimation(animate: 'AMAP_ANIMATION_NONE'|'AMAP_ANIMATION_DROP'|'AMAP_ANIMATION_BOUNCE'): void;
+        getAnimation(): 'AMAP_ANIMATION_NONE'|'AMAP_ANIMATION_DROP'|'AMAP_ANIMATION_BOUNCE';
 
         setClickable(clickable: boolean): void;
         getClickable(): boolean;
@@ -563,6 +567,7 @@ declare namespace AMap {
         };
 
         setzIndex(index: number): void;
+        getzIndex(): number;
 
         getIcon(): string|Icon;
         setIcon(content: string|Icon): void;
@@ -581,6 +586,8 @@ declare namespace AMap {
         moveAlong(lnglatlist: LngLat[], speed?: number, f?: (k: number) => number, circlable?: boolean): void;
         moveTo(lnglat: LngLat, speed?: number, f?: (k: number) => number): void;
         stopMove(): void;
+        pauseMove(): void;
+        resumeMove(): void;
         setMap(map: Map): void;
         getMap(): Map;
         setTitle(title: string): void;
@@ -736,7 +743,7 @@ declare namespace AMap {
         strokeDasharray?: number[];
     }
 
-    class Circle {
+    class Circle extends Marker {
         constructor(options?: CircleOptions);
         setCenter(lnglat: LngLat): void;
         getCenter(): LngLat;
@@ -745,11 +752,6 @@ declare namespace AMap {
         getRadius(): number;
         setOptions(circleopt: CircleOptions): void;
         getOptions(): CircleOptions;
-        hide(): void;
-        show(): void;
-        setMap(map: Map): void;
-        setExtData(ext: any): void;
-        getExtData(): any;
         contains(point: LngLat): boolean;
     }
 
@@ -767,7 +769,7 @@ declare namespace AMap {
         strokeDasharray?: number[];
     }
 
-    class Polygon extends EventBindable {
+    class Polygon extends Marker {
         constructor(options?: PolygonOptions);
 
         setPath(path: LngLat[]|LngLat[][]): void;
@@ -776,11 +778,6 @@ declare namespace AMap {
         getOptions(): PolygonOptions;
         getBounds(): Bounds;
         getArea(): number;
-        hide(): void;
-        show(): void;
-        setMap(map: Map): void;
-        setExtData(ext: any): void;
-        getExtData(): any;
         contains(point: LngLat): boolean;
     }
 
@@ -799,7 +796,7 @@ declare namespace AMap {
         extData?: any;
     }
 
-    class Polyline extends EventBindable {
+    class Polyline extends Marker {
         constructor(options?: PolylineOptions);
 
         setPath(path: LngLat[]): void;
@@ -810,12 +807,6 @@ declare namespace AMap {
 
         getLength(): number;
         getBounds(): Bounds;
-        hide(): void;
-        show(): void;
-
-        setMap(map: Map): void;
-        setExtData(ext: any): void;
-        getExtData(): any;
     }
 
     class ElasticMarker extends Marker {
@@ -856,26 +847,6 @@ declare namespace AMap {
             name: string,
             position: LngLat
         }): void;
-
-        setClickable(clickable: boolean): void;
-        getClickable(): boolean;
-        getPosition(): LngLat;
-        setPosition(lnglat: LngLat): void;
-        setzIndex(index: number): void;
-        getzIndex(): number;
-        setDraggable(draggable: boolean): void;
-        getDraggable(): boolean;
-        hide(): void;
-        show(): void;
-        setCursor(cursor: string): string;
-        setMap(map: Map): void;
-        getMap(): Map;
-        setTitle(title: string): void;
-        getTitle(): string;
-        setTop(isTop: boolean): void;
-        getTop(): boolean;
-        setExtData(ext: any): void;
-        getExtData(): any;
     }
 
     class Text extends Marker {
@@ -908,52 +879,82 @@ declare namespace AMap {
             name: string,
             position: LngLat
         }): void;
-        getAnchor(): string;
-        setAnchor(anchor: string): void;
         getOffset(): Pixel;
         setOffset(offset: Pixel): void;
-        setAnimation(animate: 'AMAP_ANIMATION_NONE'|'AMAP_ANIMATION_DROP'|'AMAP_ANIMATION_BOUNCE'): void;
-        getAnimation(): 'AMAP_ANIMATION_NONE'|'AMAP_ANIMATION_DROP'|'AMAP_ANIMATION_BOUNCE';
-        setClickable(clickable: boolean): void;
-        getClickable(): boolean;
-        getPosition(): LngLat;
-        setPosition(lnglat: LngLat): void;
-        setAngle(angle: number): void;
-        getAngle(): number;
-        setzIndex(index: number): void;
-        getzIndex(): number;
-        setDraggable(draggable: boolean): void;
-        getDraggable(): boolean;
-        hide(): void;
-        show(): void;
-        setCursor(cursor: string): void;
-        moveAlong(path: LngLat[], speed?: number, f?: (k: number) => number, circlable?: boolean): void;
-        moveTo(lnglat: LngLat, speed?: number, f?: (k: number) => number): void;
-        stopMove(): void;
-        pauseMove(): void;
-        resumeMove(): void;
-        setMap(map: Map): void;
-        getMap(): Map;
-        setTitle(title: string): void;
-        getTitle(): string;
-        setTop(isTop: boolean): void;
-        getTop(): boolean;
-        setShadow(icon: Icon): void;
-        getShadow(): Icon;
-        setExtData(ext: any): void;
-        getExtData(): any;
+    }
+
+    interface CircleMarkerOptions {
+        map?: Map;
+        zIndex?: number;
+        center?: LngLat;
+        bubble?: boolean;
+        radius?: number;
+        strokeColor?: string;
+        strokeOpacity?: number;
+        strokeWeight?: number;
+        fillColor?: string;
+        fillOpacity?: number;
+        extData?: any;
     }
 
     class CircleMarker extends Marker {
+        constructor(opt: CircleMarkerOptions);
 
+        setCenter(lnglat: LngLat): void;
+        getCenter(): LngLat;
+        setRadius(radius: number): void;
+        getRadius(): number;
+        setOptions(circleopt: CircleMarkerOptions): void;
+        getOptions(): CircleMarkerOptions;
+    }
+
+    interface EllipseOptions {
+        map?: Map;
+        zIndex?: number;
+        center?: LngLat;
+        radius?: number[];
+        bubble?: boolean;
+        cursor?: string;
+        strokeColor?: string;
+        strokeOpacity?: number;
+        strokeWeight?: number;
+        fillColor?: string;
+        fillOpacity?: number;
+        strokeStyle?: 'solid'|'dashed';
+        extData?: any;
+        strokeDasharray?: number[];
     }
 
     class Ellipse extends Marker {
+        constructor(opt: EllipseOptions);
+        getCenter(): LngLat;
+        setCenter(lnglat: LngLat): void;
+        contains(point: LngLat): boolean;
+    }
 
+    interface RectangleOptions {
+        map?: Map;
+        zIndex?: number;
+        bounds?: Bounds;
+        bubble?: boolean;
+        cursor?: string;
+        strokeColor?: string;
+        strokeOpacity?: number;
+        strokeWeight?: number;
+        fillColor?: string;
+        fillOpacity?: number;
+        strokeStyle?: string;
+        extData?: any;
+        strokeDasharray?: number[];
     }
 
     class Rectangle extends Marker {
-
+        constructor(opt: RectangleOptions);
+        getBounds(): Bounds;
+        setBounds(bounds: Bounds): void;
+        setOptions(opt: RectangleOptions): void;
+        getOptions(): RectangleOptions;
+        contains(point: LngLat): boolean;
     }
 
     class OverlayGroup extends Marker {
